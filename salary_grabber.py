@@ -1,17 +1,23 @@
 import json, requests, pprint
 
+# SalaryGrabber should only build & save the dataset. Utility methods are allowed
+# if they improve the readability/usability of the dataset. SalaryGrabber takes in
+# a SalaryStrategy to determine which functionality to use (and thus the shape of
+# the data).
 class SalaryGrabber:
-    salaries = []
-    urls = []
-    jsons = []
-    text_bodies = []
+    properties = {
+        'salaries': [],
+        'urls': [],
+        'jsons': [],
+        'text_bodies': []    
+    }
 
     def __init__(self, urls):
-        self.salaries = []
-        self.urls = urls
+        self.properties['salaries'] = []
+        self.properties['urls'] = urls
         
         # list of jsons from salary thread
-        self.jsons = []
+        self.properties['jsons'] = []
         
         # get json from urls
         self.get_JSON(urls)
@@ -25,24 +31,25 @@ class SalaryGrabber:
             )
 
             # need to call .json() after since above returns requests
-            self.jsons.append(json.json())
+            self.properties['jsons'].append(json.json())
     
     def print_JSON(self):
-        for item in self.jsons:
+        for item in self.properties['jsons']:
             print(item.json())
 
-    def save_JSON(self):
-        self.r_find(self.jsons, 'body')
+    def save_JSON(self, some_json={}):
+        self.r_find(self.properties['jsons'], 'body')
       
-        with open('salary_thread', 'wt') as f:
-            f.write(str(pprint.pformat(self.text_bodies)))
+        with open('datasets/salary_thread', 'wt') as f:
+            f.write(str(pprint.pformat(self.properties['text_bodies'])))
 
 
     def read_existing_JSON(self):
         # Assumes a well-formatted dict as a string in the JSON file
-        with open('salary_thread') as f:
+        with open('datasets/salary_thread') as f:
             print(f.read())
 
+    # Utility methods
     def r_find(self, l_or_d, key):
         # recursively search a nested list/dict for a field
 
@@ -51,7 +58,7 @@ class SalaryGrabber:
                 self.r_find(i, key)
         elif isinstance(l_or_d, dict):
             if key in l_or_d: 
-                self.text_bodies.append(l_or_d[key])       
+                self.properties['text_bodies'].append(l_or_d[key])       
             for values in l_or_d.values():
                 self.r_find(values, key)
 
