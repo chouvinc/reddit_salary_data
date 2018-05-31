@@ -24,6 +24,7 @@ class SalaryGrabber:
 
     # JSON Methods
     def get_JSON(self, urls):
+        # TODO 2)
         for url in urls:
             json = requests.get(
                 url,
@@ -38,6 +39,7 @@ class SalaryGrabber:
             print(item.json())
 
     def save_JSON(self, some_json={}):
+        # TODO 1)
         self.r_find(self.properties['jsons'], 'body')
       
         with open('datasets/salary_thread', 'wt') as f:
@@ -51,7 +53,7 @@ class SalaryGrabber:
 
     # Utility methods
     def r_find(self, l_or_d, key):
-        # recursively search a nested list/dict for a field
+        # recursively search a nested list/dict for a key
 
         if isinstance(l_or_d, list):
             for i in l_or_d:
@@ -62,5 +64,6 @@ class SalaryGrabber:
             for values in l_or_d.values():
                 self.r_find(values, key)
 
-
-        
+# TODO: 
+# 1) Make logic to build a different data set per new page of salary discussion
+# 2) Fetch new salary threads automatically (either set min # of comments or min period of time that thread existed)
