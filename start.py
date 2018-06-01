@@ -6,4 +6,4 @@ salaries.save_JSON()
 
 parser = SalaryParser()
 parser.set_dataset()
-parser.print_data()
+parser.get_salary_info()
