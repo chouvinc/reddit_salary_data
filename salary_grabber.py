@@ -43,7 +43,7 @@ class SalaryGrabber:
         self.r_find(self.properties['jsons'], 'body')
       
         with open('datasets/salary_thread', 'wt') as f:
-            f.write(str(pprint.pformat(self.properties['text_bodies'])))
+            f.write(json.dumps(self.properties['text_bodies']))
 
 
     def read_existing_JSON(self):
