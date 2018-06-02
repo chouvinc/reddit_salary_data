@@ -43,8 +43,7 @@ class SalaryGrabber:
         self.r_find(self.properties['jsons'], 'body')
       
         with open('datasets/salary_thread', 'wt') as f:
-            f.write(json.dumps(self.properties['text_bodies'], sort_keys=True, indent=4, separators=(',', ': ')))
-
+            f.write(json.dumps(self.properties['text_bodies'], indent=4, separators=(',', ': ')))
 
     def read_existing_JSON(self):
         # Assumes a well-formatted dict as a string in the JSON file
@@ -60,9 +59,21 @@ class SalaryGrabber:
                 self.r_find(i, key)
         elif isinstance(l_or_d, dict):
             if key in l_or_d: 
-                self.properties['text_bodies'].append(l_or_d[key])       
+                self.append_to_property('text_bodies', l_or_d[key])       
             for values in l_or_d.values():
                 self.r_find(values, key)
+
+    def append_to_property(self, property, value):
+        self.properties[property].append(value)
+
+    # Sanity check that we're not leaking any data in r_find
+    def dump_full_data(self):
+        with open('datasets/full_salary_thread', 'wt') as f:
+            f.write(json.dumps(self.properties['jsons'], indent=4, separators=(',',':')))
+
+    def dump_no_formatting(self):
+        with open('datasets/no_formatting_salary_thread', 'wt') as f:
+            f.write(str(self.properties['text_bodies']))
 
 # TODO: 
 # 1) Make logic to build a different data set per new page of salary discussion
