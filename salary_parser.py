@@ -59,26 +59,20 @@ class SalaryParser:
 
     def map_to_region(self, filtered_data, region):
         c_map = self.salary_map.comment_map
-        key_map = c_map.keys()
-        counter = 0
-        nested_info = []
-
-        self.pop_until_key(filtered_data, self.peek_od_keys(c_map))
-
-        # while filtered_data:
-        #     first_word, comment_content = self.split_comment(filtered_data.pop(0))
-        #     c_keys = c_map.keys()
-
-        #     # TODO: consider using a suffix tree 
-        #     key = self.get_key_from_substring(first_word, c_keys)
-        #     if key == self.peek_od_keys(c_map):
-        #         nested_info.append(comment_content)
+        keys = list(c_map.keys())
 
         while filtered_data:
-            curr_first_word, curr_content = self.split_comment(filtered_data.pop(0))
-            curr_key = self.get_key_from_substring(curr_first_word, key_map)
+            # pop until first key
+            self.pop_until_key(filtered_data, self.peek_od_keys(c_map))
 
-            # TODO FINISH THIS IMMEDIATELY
+            for i in range(len(keys)):
+                curr_data = self.pop_until_key(filtered_data, keys[i])
+                if curr_data:
+                    # append list to show that one person had multiples of one field
+                    self.salary_map.regions[region][keys[i]].append(curr_data)
+                elif filtered_data:
+                    one_liner = self.split_comment(filtered_data.pop(0))[1] 
+                    self.salary_map.regions[region][keys[i]].extend(one_liner)
             
         with open('datasets/so_purdy', 'w') as f:
             f.write(json.dumps(self.salary_map.regions, indent=4, separators=(',',':')))
@@ -88,13 +82,16 @@ class SalaryParser:
 
     # Utility methods
     def pop_until_key(self, data, key):
+        popped_data = []
+
         while data:
             this_word = self.split_comment(data[0])
-            key = self.get_key_from_substring(this_word, self.salary_map.comment_map.keys())
+            this_key = self.get_key_from_substring(this_word[0], self.salary_map.comment_map.keys())
 
-            if key:
-                return
-            data.pop(0)    
+            if this_key == key:
+                return popped_data
+
+            popped_data.append(data.pop(0))    
 
     def peek_od_keys(self, od):
         # takes an OrderdDict object and adds a peek (first) method
