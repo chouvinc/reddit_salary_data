@@ -4,23 +4,10 @@ from pprint import pprint
 import json, collections
 
 class SalaryParser:
-    # string that specifies current dataset
     file_name = ''
     full_path = ''
     data = []
-    # TODO (Maybe?): make these properties dynamically adjustable
-    mapped = collections.OrderedDict([
-        ('Education', []),
-        ('Prior Experience', []),
-        ('Company/Industry', []),
-        ('Title', []),
-        ('Tenure Length', []),
-        ('Location', []),
-        ('Salary', []),
-        ('Relocation/Signing Bonus', []),
-        ('Stock and/or Recurring Bonuses', []),
-        ('Total Comp', [])
-    ])
+    comment_bodies = []
 
     def __init__(self, path="datasets/", file_name=""):
         self.path = path
@@ -47,15 +34,21 @@ class SalaryParser:
         pprint(self.data)
     
     def get_salary_info(self):
+        self.get_comment()
+
+    def get_comment(self):
         for i in range(len(self.data)):
             if 'Education' in self.data[i]:
-                # current post (with the correct format)
-                curr_block = self.data[i]
-                # some posts have multiple new lines in between categories so filter after splitting \n
-                filtered_and_split = list(filter(None, curr_block.split('\n')))
-                # filtered now but categories not necessarily next to text body. Send to utility method
+                curr_comment = self.data[i]
+                # some posts have multiple new lines in between categories so filter empty strings after splitting \n
+                filtered_and_split = list(filter(None, curr_comment.split('\n')))
+                # TODO: send to salary_map once finished
 
-                self.mapped = self.salary_info_mapper(filtered_and_split)
+    def get_region(self):
+        pass
+
+    def get_post_title(self):
+        pass
 
     # Utility methods
     def salary_info_mapper(self, filtered_data):
