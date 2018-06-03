@@ -7,7 +7,7 @@ class SalaryGrabber:
         'salaries': [],
         'url': None,
         'jsons': None,
-        'text_bodies': []    
+        'text_bodies': []
     }
 
     def __init__(self, url):
@@ -36,7 +36,7 @@ class SalaryGrabber:
 
     def save_JSON(self, some_json={}):
         # TODO 1)
-        self.r_find(self.properties['jsons'], 'body')
+        self.r_find_and_append(self.properties['jsons'], 'body')
       
         with open('raw_datasets/salary_thread', 'wt') as f:
             f.write(json.dumps(self.properties['text_bodies'], indent=4, separators=(',', ': ')))
@@ -46,23 +46,28 @@ class SalaryGrabber:
         with open('raw_datasets/salary_thread') as f:
             print(f.read())
 
+    def get_post_title(self):
+        return self.r_find_and_append(self.properties['jsons'], 'title')
+
     # Utility methods
-    def r_find(self, l_or_d, key):
+    def r_find_and_append(self, l_or_d, key):
         # recursively search a nested list/dict for a key
 
         if isinstance(l_or_d, list):
             for i in l_or_d:
-                self.r_find(i, key)
+                self.r_find_and_append(i, key)
         elif isinstance(l_or_d, dict):
             if key in l_or_d: 
-                self.append_to_property('text_bodies', l_or_d[key])       
+                self.append_to_property(key, l_or_d[key])       
             for values in l_or_d.values():
-                self.r_find(values, key)
+                self.r_find_and_append(values, key)
 
     def append_to_property(self, property, value):
+        if property not in self.properties:
+            self.properties[property] = []
         self.properties[property].append(value)
 
-    # Sanity check that we're not leaking any data in r_find
+    # Sanity check that we're not leaking any data in r_find_and_append
     def dump_full_data(self):
         with open('misc_datasets/full_salary_thread', 'wt') as f:
             f.write(json.dumps(self.properties['jsons'], indent=4, separators=(',',':')))

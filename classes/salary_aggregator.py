@@ -65,12 +65,6 @@ class SalaryAggregator:
                 elif filtered_data:
                     one_liner = self.split_comment(filtered_data.pop(0))[1] 
                     self.salary_map.regions[region][keys[i]].extend(one_liner)
-            
-        with open('raw_datasets/so_purdy', 'w') as f:
-            f.write(json.dumps(self.salary_map.regions, indent=4, separators=(',',':')))
-
-    def get_post_title(self):
-        pass
 
     # Utility methods
     def pop_until_key(self, data, key):
