@@ -1,3 +1,7 @@
-raw_datasets/*
 misc_datasets/*
 raw_datasets/*
+parsed_datasets/*
+
+!misc_datasets/README.md
+!raw_datasets/README.md
+!parsed_datasets/README.md
