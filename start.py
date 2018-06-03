@@ -1,5 +1,5 @@
-from salary_grabber import SalaryGrabber
-from salary_parser import SalaryParser
+from src.classes.salary_grabber import SalaryGrabber
+from src.classes.salary_parser import SalaryParser
 
 import json
 

@@ -1,14 +1,14 @@
 # Looks into raw_datasets for some data to parse, sanatize, and possibly reformat if needed
 
 from pprint import pprint
-import json, collections, salary_map
+import json, collections, classes.salary_map
 
 class SalaryParser:
     file_name = ''
     full_path = ''
     data = []
     comment_bodies = []
-    salary_map = salary_map.SalaryMap()
+    salary_map = classes.salary_map.SalaryMap()
 
     def __init__(self, path="raw_datasets/", file_name=""):
         self.path = path
@@ -25,14 +25,6 @@ class SalaryParser:
         
         self.file_name = file_name
         self.full_path = self.path + file_name
-
-    # method to parse and format as list of key-value pairs <key: text_body>
-    def parse_and_dict(self):
-        pass
-
-    # data logger (in case you don't know which dataset you're using)
-    def print_data(self):
-        pprint(self.data)
     
     def get_salary_info(self):
         self.get_comment_by_region()
