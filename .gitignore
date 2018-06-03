@@ -5,3 +5,5 @@ parsed_datasets/*
 !misc_datasets/README.md
 !raw_datasets/README.md
 !parsed_datasets/README.md
+
+**/__pycache__/

@@ -1,5 +1,5 @@
-from src.classes.salary_grabber import SalaryGrabber
-from src.classes.salary_parser import SalaryParser
+from classes.salary_grabber import SalaryGrabber
+from classes.salary_aggregator import SalaryAggregator
 
 import json
 
@@ -8,6 +8,6 @@ salaries.save_JSON()
 salaries.dump_full_data()
 salaries.dump_no_formatting()
 
-parser = SalaryParser()
-parser.set_dataset()
-parser.get_salary_info()
+aggregator = SalaryAggregator()
+aggregator.set_dataset()
+aggregator.get_salary_info()
