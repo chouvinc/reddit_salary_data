@@ -1,1 +1,3 @@
-datasets/*
+raw_datasets/*
+misc_datasets/*
+raw_datasets/*

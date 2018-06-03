@@ -1,53 +1,49 @@
 import json, requests, pprint
 
 # SalaryGrabber should only build & save the dataset. Utility methods are allowed
-# if they improve the readability/usability of the dataset. SalaryGrabber takes in
-# a SalaryStrategy to determine which functionality to use (and thus the shape of
-# the data).
+# if they improve the readability/usability of the dataset. 
 class SalaryGrabber:
     properties = {
         'salaries': [],
-        'urls': [],
-        'jsons': [],
+        'url': None,
+        'jsons': None,
         'text_bodies': []    
     }
 
-    def __init__(self, urls):
+    def __init__(self, url):
         self.properties['salaries'] = []
-        self.properties['urls'] = urls
+        self.properties['url'] = url
         
         # list of jsons from salary thread
         self.properties['jsons'] = []
         
         # get json from urls
-        self.get_JSON(urls)
+        self.get_JSON()
 
     # JSON Methods
-    def get_JSON(self, urls):
+    def get_JSON(self):
         # TODO 2)
-        for url in urls:
-            json = requests.get(
-                url,
-                headers={'user-agent': 'Mozilla/5.0'}
-            )
+        json = requests.get(
+            self.properties['url'],
+            headers={'user-agent': 'Mozilla/5.0'}
+        )
 
-            # need to call .json() after since above returns requests
-            self.properties['jsons'].append(json.json())
+        # need to call .json() after since above returns requests
+        self.properties['jsons'] = json.json()
     
     def print_JSON(self):
-        for item in self.properties['jsons']:
-            print(item.json())
+        print(self.properties['json'])
 
     def save_JSON(self, some_json={}):
         # TODO 1)
         self.r_find(self.properties['jsons'], 'body')
       
-        with open('datasets/salary_thread', 'wt') as f:
+        with open('raw_datasets/salary_thread', 'wt') as f:
             f.write(json.dumps(self.properties['text_bodies'], indent=4, separators=(',', ': ')))
 
     def read_existing_JSON(self):
         # Assumes a well-formatted dict as a string in the JSON file
-        with open('datasets/salary_thread') as f:
+        with open('raw_datasets/salary_thread') as f:
             print(f.read())
 
     # Utility methods
@@ -68,11 +64,11 @@ class SalaryGrabber:
 
     # Sanity check that we're not leaking any data in r_find
     def dump_full_data(self):
-        with open('datasets/full_salary_thread', 'wt') as f:
+        with open('misc_datasets/full_salary_thread', 'wt') as f:
             f.write(json.dumps(self.properties['jsons'], indent=4, separators=(',',':')))
 
     def dump_no_formatting(self):
-        with open('datasets/no_formatting_salary_thread', 'wt') as f:
+        with open('misc_datasets/no_formatting_salary_thread', 'wt') as f:
             f.write(str(self.properties['text_bodies']))
 
 # TODO: 

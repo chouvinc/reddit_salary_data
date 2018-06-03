@@ -1,4 +1,4 @@
-# Looks into datasets for some data to parse, sanatize, and possibly reformat if needed
+# Looks into raw_datasets for some data to parse, sanatize, and possibly reformat if needed
 
 from pprint import pprint
 import json, collections, salary_map
@@ -10,7 +10,7 @@ class SalaryParser:
     comment_bodies = []
     salary_map = salary_map.SalaryMap()
 
-    def __init__(self, path="datasets/", file_name=""):
+    def __init__(self, path="raw_datasets/", file_name=""):
         self.path = path
         self.file_name = file_name
 
@@ -20,7 +20,7 @@ class SalaryParser:
     # method to grab a particular dataset to parse
     # TODO: remove default for file_name after figuring out what to do if not given file
     def set_dataset(self, file_name='salary_thread'):
-        with open('datasets/' + file_name, 'rb') as f:
+        with open('raw_datasets/' + file_name, 'rb') as f:
             self.data = json.loads(f.read())
         
         self.file_name = file_name
@@ -74,7 +74,7 @@ class SalaryParser:
                     one_liner = self.split_comment(filtered_data.pop(0))[1] 
                     self.salary_map.regions[region][keys[i]].extend(one_liner)
             
-        with open('datasets/so_purdy', 'w') as f:
+        with open('raw_datasets/so_purdy', 'w') as f:
             f.write(json.dumps(self.salary_map.regions, indent=4, separators=(',',':')))
 
     def get_post_title(self):
