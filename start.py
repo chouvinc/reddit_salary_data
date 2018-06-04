@@ -1,5 +1,6 @@
 from classes.salary_grabber import SalaryGrabber
 from classes.salary_aggregator import SalaryAggregator
+from classes.post_grabber import PostGrabber
 
 import json
 
@@ -15,4 +16,5 @@ aggregator = SalaryAggregator()
 aggregator.set_dataset()
 aggregator.get_salary_info()
 
-# test url grabber
+# test post grabber
+post_grabber = PostGrabber()
